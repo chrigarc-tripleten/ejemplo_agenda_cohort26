@@ -1,6 +1,8 @@
 const express = require('express');
 const routerAddress = require('./routes/address.js');
 const routerUsers= require('./routes/users.js');
+const routerAuth = require('./routes/auth.js')
+const authMiddleware = require('./middlewares/auth.js')
 const mongoose = require('mongoose');
 
 
@@ -11,13 +13,10 @@ const app = express();
 app.use(express.json()); // para parsear application/json
 app.use(express.urlencoded({ extended: true })); 
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '68ae62db36d69c61d1d5eb7c' // pega el _id del usuario de prueba que creamos en el paso anterior
-  };
 
-  next();
-});
+app.use(routerAuth);
+
+app.use(authMiddleware);
 
 app.use(routerAddress);
 app.use(routerUsers);
